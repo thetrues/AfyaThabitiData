@@ -1,36 +1,166 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light" data-width="default" data-menu-styles="dark" data-toggled="close">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <!-- Meta Data -->
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title> VERTIX - Bootstrap 5 Premium Admin & Dashboard Template </title>
+    <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
+    <meta name="Author" content="Spruko Technologies Private Limited">
+	<meta name="keywords"
+        content="">
+    
+        <!-- Favicon -->
+    <link rel="icon" href="{{ asset('assets/images/brand-logos/favicon.ico')}}" type="image/x-icon">
+    
+    <!-- Choices JS -->
+    <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js')}}"></script>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
+    <!-- Main Theme Js -->
+    <script src="{{ asset('assets/js/main.js')}}"></script>
+    
+    <!-- Bootstrap Css -->
+    <link id="style" href="{{ asset('assets/libs/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" >
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+    <!-- Style Css -->
+    <link href="{{ asset('assets/css/styles.css')}}" rel="stylesheet" >
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+    <!-- Icons Css -->
+    <link href="{{ asset('assets/css/icons.css')}}" rel="stylesheet" >
+
+    <!-- Node Waves Css -->
+    <link href="{{ asset('assets/libs/node-waves/waves.min.css')}}" rel="stylesheet" > 
+
+    <!-- Simplebar Css -->
+    <link href="{{ asset('assets/libs/simplebar/simplebar.min.css')}}" rel="stylesheet" >
+    
+    <!-- Color Picker Css -->
+    <link rel="stylesheet" href="{{ asset('assets/libs/flatpickr/flatpickr.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/@simonwep/pickr/themes/nano.min.cs')}}s">
+
+    <!-- Choices Css -->
+    <link rel="stylesheet" href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css')}}">
+
+    <!-- FlatPickr CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/libs/flatpickr/flatpickr.min.css')}}">
+
+    <!-- Auto Complete CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/libs/@tarekraafat/autocomplete.js/css/autoComplete.css')}}">
+
+
+</head>
+
+<body>
+
+
+
+    <!-- Loader -->
+<div id="loader" >
+    <img src="assets/images/media/loader.svg" alt="">
+</div>
+<!-- Loader -->
+
+    <div class="page">
+        <!-- app-header -->
+@include('layouts.header')
+<!-- /app-header -->
+        <!-- Start::app-sidebar -->
+@include('layouts.asidebar')
+<!-- End::app-sidebar -->
+
+        <!-- Start::app-content -->
+        <div class="main-content app-content">
+          <div class="container-fluid">
+            {{ $slot }}
+          </div>
         </div>
-    </body>
+        <!-- End::app-content -->
+
+
+        <!-- Footer Start -->
+<footer class="footer mt-auto py-3 bg-white text-center">
+    <div class="container">
+        <span class="text-muted"> Copyright © <span id="year"></span> <a
+                href="javascript:void(0);" class="text-dark fw-medium">Vertix</a>.
+            Designed with <span class="bi bi-heart-fill text-danger"></span> by <a href="javascript:void(0);">
+                <span class="fw-medium text-primary">Spruko</span>
+            </a> All
+            rights
+            reserved
+        </span>
+    </div>
+</footer>
+<!-- Footer End -->
+        <div class="modal fade" id="header-responsive-search" tabindex="-1" aria-labelledby="header-responsive-search" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="input-group">
+                    <input type="text" class="form-control border-end-0" placeholder="Search Anything ..."
+                        aria-label="Search Anything ..." aria-describedby="button-addon2">
+                    <button class="btn btn-primary" type="button"
+                        id="button-addon2"><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </div>
+
+    
+<!-- Scroll To Top -->
+<div class="scrollToTop">
+    <span class="arrow lh-1"><i class="ti ti-caret-up fs-20"></i></span>
+</div>
+<div id="responsive-overlay"></div>
+<!-- Scroll To Top -->
+
+<!-- Popper JS -->
+<script src="{{ asset('assets/libs/@popperjs/core/umd/popper.min.js')}}"></script>
+
+<!-- Bootstrap JS -->
+<script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+<!-- Defaultmenu JS -->
+<script src="{{ asset('assets/js/defaultmenu.min.js')}}"></script>
+
+<!-- Node Waves JS-->
+<script src="{{ asset('assets/libs/node-waves/waves.min.js')}}"></script>
+
+<!-- Sticky JS -->
+<script src="{{ asset('assets/js/sticky.js')}}"></script>
+
+<!-- Simplebar JS -->
+<script src="{{ asset('assets/libs/simplebar/simplebar.min.js')}}"></script>
+<script src="{{ asset('assets/js/simplebar.js')}}"></script>
+
+<!-- Auto Complete JS -->
+<script src="{{ asset('assets/libs/@tarekraafat/autocomplete.js/autoComplete.min.js')}}"></script>
+
+<!-- Color Picker JS -->
+<script src="{{ asset('assets/libs/@simonwep/pickr/pickr.es5.min.js')}}"></script>
+
+<!-- Date & Time Picker JS -->
+<script src="{{ asset('assets/libs/flatpickr/flatpickr.min.js')}}"></script>
+
+
+    <!-- Apex Charts JS -->
+    <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
+
+    <!-- Ecommerce Dashboard -->
+    <script src="{{ asset('assets/js/ecommerce-dashboard.js')}}"></script>
+
+    <!-- Custom JS -->
+    <script src="{{ asset('assets/js/custom.js')}}"></script>
+
+    
+<!-- Custom-Switcher JS -->
+<script src="{{ asset('assets/js/custom-switcher.min.js')}}"></script>
+
+</body>
+
 </html>
