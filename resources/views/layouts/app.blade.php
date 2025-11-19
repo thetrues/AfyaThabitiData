@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title> VERTIX - Bootstrap 5 Premium Admin & Dashboard Template </title>
+    <title> AfyaThabiti </title>
     <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
     <meta name="Author" content="Spruko Technologies Private Limited">
 	<meta name="keywords"
@@ -74,6 +74,19 @@
         <!-- Start::app-content -->
         <div class="main-content app-content">
           <div class="container-fluid">
+            @php
+                $filterParameters = session('filter_parameters', []);
+            @endphp
+            @if(!empty($filterParameters))
+               <div class="alert alert-success d-flex align-items-center m-2" role="alert">
+                    <strong>Current Filters Applied:</strong> 
+                    Facility: {{ $filterParameters['facility'] ?? 'N/A' }} 
+                    Start Date: {{ $filterParameters['start_date'] ?? 'N/A' }} 
+                    End Date: {{ $filterParameters['end_date'] ?? 'N/A' }}
+                </div>
+            @endif
+
+
             {{ $slot }}
           </div>
         </div>
@@ -86,7 +99,7 @@
         <span class="text-muted"> Copyright © <span id="year"></span> <a
                 href="javascript:void(0);" class="text-dark fw-medium">Vertix</a>.
             Designed with <span class="bi bi-heart-fill text-danger"></span> by <a href="javascript:void(0);">
-                <span class="fw-medium text-primary">Spruko</span>
+                <span class="fw-medium text-primary">Samweli Abdallah</span>
             </a> All
             rights
             reserved
@@ -160,6 +173,35 @@
     
 <!-- Custom-Switcher JS -->
 <script src="{{ asset('assets/js/custom-switcher.min.js')}}"></script>
+
+ <script>
+                function submitFilter() {
+                    const form = document.getElementById('filterForm');
+                    const formData = new FormData(form);
+                    
+                    fetch('{{ route("data.filter") }}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            facility: formData.get('facility'),
+                            start_date: formData.get('start_date'),
+                            end_date: formData.get('end_date')
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                        // reload the page to reflect the applied filters
+                        location.reload();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+                </script>
 
 </body>
 

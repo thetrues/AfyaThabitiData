@@ -28,7 +28,7 @@
                         
                     </div>
                 </div>
-                <form action="{{ route('query.store') }}" method="post">
+                <form action="{{ route('query.update', ['id' => $query->id]) }}" method="post">
                 @csrf
                 <div class="card-body">
                     <div class="row gy-4">
@@ -54,50 +54,50 @@
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <label for="parameter_1" class="form-label">Parameter 1</label>
-                            <input type="text" name="parameter_1" class="form-control" id="parameter_1" placeholder="StartDate"     value="{{ $query->parameter_1 }}">
+                            <input type="text" name="parameter_1" class="form-control" id="parameter_1" placeholder="StartDate"     value="{{ $query->parameters1 }}">
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <label for="parameter_1_type" class="form-label">Parameter 1 Type</label>
                             <select name="parameter_1_type" id="parameter_1_type" class="form-control">
-                                <option value="date" {{ $query->parameter_1_type == 'date' ? 'selected' : '' }}>Date</option>
-                                <option value="text" {{ $query->parameter_1_type == 'text' ? 'selected' : '' }}>Text</option>
-                                <option value="number" {{ $query->parameter_1_type == 'number' ? 'selected' : '' }}>Number</option>
+                                <option value="date" {{ $query->parameter_type1 == 'date' ? 'selected' : '' }}>Date</option>
+                                <option value="text" {{ $query->parameters_type1 == 'text' ? 'selected' : '' }}>Text</option>
+                                <option value="number" {{ $query->parameters_type1 == 'number' ? 'selected' : '' }}>Number</option>
                             </select>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <label for="parameter_2" class="form-label">Parameter 2</label>
-                            <input type="text" name="parameter_2" class="form-control" id="parameter_2" placeholder="EndDate"   value="{{ $query->parameter_2 }}">
+                            <input type="text" name="parameter_2" class="form-control" id="parameter_2" placeholder="EndDate"   value="{{ $query->parameters2 }}">
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <label for="parameter_2_type" class="form-label">Parameter 2 Type</label>
                             <select name="parameter_2_type" id="" class="form-control">
-                                <option value="date" {{ $query->parameter_2_type == 'date' ? 'selected' : '' }}>Date</option>
-                                <option value="text" {{ $query->parameter_2_type == 'text' ? 'selected' : '' }}>Text</option>
-                                <option value="number" {{ $query->parameter_2_type == 'number' ? 'selected' : '' }}>Number</option>
+                                <option value="date" {{ $query->parameters_type2 == 'date' ? 'selected' : '' }}>Date</option>
+                                <option value="text" {{ $query->parameters_type2 == 'text' ? 'selected' : '' }}>Text</option>
+                                <option value="number" {{ $query->parameters_type2 == 'number' ? 'selected' : '' }}>Number</option>
                             </select>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <label for="input-tel" class="form-label">Parameter 3</label>
-                            <input type="text" name="parameter_3" class="form-control" id="input-tel" value="{{ $query->parameter_3 }}">
+                            <input type="text" name="parameter_3" class="form-control" id="input-tel" value="{{ $query->parameters3 }}">
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <label for="parameter_3_type" class="form-label">Parameter 3 Type</label>
                             <select name="parameter_3_type" id="" class="form-control">
-                                <option value="text" {{ $query->parameter_3_type == 'text' ? 'selected' : '' }}>Text</option>
-                                <option value="number" {{ $query->parameter_3_type == 'number' ? 'selected' : '' }}>Number</option>
-                                <option value="date" {{ $query->parameter_3_type == 'date' ? 'selected' : '' }}>Date</option>
+                                <option value="text" {{ $query->parameter_type3 == 'text' ? 'selected' : '' }}>Text</option>
+                                <option value="number" {{ $query->parameters_type3 == 'number' ? 'selected' : '' }}>Number</option>
+                                <option value="date" {{ $query->parameters_type3 == 'date' ? 'selected' : '' }}>Date</option>
                             </select>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <label for="input-week" class="form-label">Parameter 4</label>
-                            <input type="text" name="parameter_4" class="form-control" id="input-week" value="{{ $query->parameter_4 }}">
+                            <input type="text" name="parameter_4" class="form-control" id="input-week" value="{{ $query->parameters4 }}">
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <label for="input-month" class="form-label">Parameter 4 Type</label>
                             <select name="parameter_4_type" id="" class="form-control">
-                                <option value="text" {{ $query->parameter_4_type == 'text' ? 'selected' : '' }}>Text</option>
-                                <option value="number" {{ $query->parameter_4_type == 'number' ? 'selected' : '' }}>Number</option>
-                                <option value="date" {{ $query->parameter_4_type == 'date' ? 'selected' : '' }}>Date</option>
+                                <option value="text" {{ $query->parameters_type4 == 'text' ? 'selected' : '' }}>Text</option>
+                                <option value="number" {{ $query->parameter_type4 == 'number' ? 'selected' : '' }}>Number</option>
+                                <option value="date" {{ $query->parameter_type4 == 'date' ? 'selected' : '' }}>Date</option>
                             </select>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">

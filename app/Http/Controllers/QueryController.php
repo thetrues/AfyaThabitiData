@@ -34,8 +34,15 @@ class QueryController extends Controller
             'sql_statement' => $sql,
             'keyword' => $request->keyword,
             'query_category_id' => $request->query_category,
-            'is_active' => true,
-            'created_by' => Auth::user()->id,
+            'parameters1' => $request->parameter_1,
+            'parameters_type1' => $request->parameter_1_type,
+            'parameters2' => $request->parameter_2,
+            'parameters_type2' => $request->parameter_2_type,
+            'parameters3' => $request->parameter_3,
+            'parameters_type3' => $request->parameter_3_type,
+            'parameters4' => $request->parameter_4,
+            'parameters_type4' => $request->parameter_4_type,
+            'updated_by' => Auth::user()->id,
         ]);
 
         return redirect()->route('query.list')->with('success', 'Query created successfully');
@@ -47,6 +54,38 @@ class QueryController extends Controller
         return view('query.edit', compact('categories', 'query'));
     }
 
+    public function updateQuery(Request $request){
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'sql_statement' => 'required|string',
+            'keyword' => 'nullable|string|max:100',
+            'query_category_id' => 'nullable|exists:query_categories,id'
+        ]);
+
+        $query = Query::findOrFail($request->id);
+        $sql = base64_encode($request->sql_statement);
+
+        $query->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'sql_statement' => $sql,
+            'keyword' => $request->keyword,
+            'query_category_id' => $request->query_category,
+            'parameters1' => $request->parameter_1,
+            'parameters_type1' => $request->parameter_1_type,
+            'parameters2' => $request->parameter_2,
+            'parameters_type2' => $request->parameter_2_type,
+            'parameters3' => $request->parameter_3,
+            'parameters_type3' => $request->parameter_3_type,
+            'parameters4' => $request->parameter_4,
+            'parameters_type4' => $request->parameter_4_type,
+            'updated_by' => Auth::user()->id,
+        ]);
+
+        return redirect()->route('query.list')->with('success', 'Query updated successfully');
+    }
+
     public function listQuery(Request $request){
 
         $queries = \App\Models\Query::all();
@@ -54,7 +93,10 @@ class QueryController extends Controller
     }
 
     public function deleteQuery(Request $request){
-        //
+        $query = Query::findOrFail($request->id);
+        $query->delete();
+
+        return redirect()->route('query.list')->with('success', 'Query deleted successfully');
     }
 
     public function categories(Request $request){

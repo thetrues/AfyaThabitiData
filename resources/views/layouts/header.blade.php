@@ -30,11 +30,27 @@
             <!-- Start::header-element -->
             <div class="header-element header-search d-md-block d-none my-auto">
                 <!-- Start::header-link -->
-                <input type="text" class="header-search-bar form-control" id="header-search"
-                    placeholder="Search for anything here..." spellcheck=false autocomplete="off" autocapitalize="off">
-                <a href="javascript:void(0);" class="header-search-icon border-0">
-                    <i class="bi bi-search"></i>
-                </a>
+                 <div class="col-md-12">
+                <form class="d-flex"  id="filterForm">
+                    <select name="facility" id="facility" class="form-control">
+                        <!--get facilities from db -->
+                        <option value="all">All Facilities</option>
+                        @php
+                        $facilities = App\Models\Facility::all();
+                        @endphp
+                        @foreach($facilities as $facility)
+                        <option value="{{ $facility->id }}">{{ $facility->facility_name }}</option>
+                        @endforeach
+                    </select>
+                    <input class="form-control me-2" type="date" name="start_date" id="start_date" placeholder="Start Date" aria-label="Search" required>
+                    <input class="form-control me-2" type="date" name="end_date" id="end_date" placeholder="End Date" aria-label="Search" required>
+                    <button class="btn btn-primary" type="button" onclick="submitFilter()">Filter</button> 
+                </form>
+
+               
+                 </div>
+              
+            
                 <!-- End::header-link -->
             </div>
             <!-- End::header-element -->
@@ -47,12 +63,13 @@
 
             <!-- Start::header-element -->
             <li class="header-element d-md-none d-block">
-                <a href="javascript:void(0);" class="header-link" data-bs-toggle="modal"
-                    data-bs-target="#header-responsive-search">
-                    <!-- Start::header-link-icon -->
-                    <i class="bi bi-search header-link-icon"></i>
-                    <!-- End::header-link-icon -->
-                </a>
+              <form >
+               <!---startdate-->
+                <input type="date" name="startdate" id="startdate" class="form-control">
+                <input type="date" name="enddate" id="enddate" class="form-control">
+                <button type="submit" class="btn btn-primary">Filter</button>
+
+              </form>
             </li>
             <!-- End::header-element -->
 
