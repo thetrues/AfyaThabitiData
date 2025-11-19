@@ -27,6 +27,7 @@ class Query extends Model
         'last_executed_at',
         'execution_count',
         'has_external_query_dependences',
+        'graph_type',
     ];
 
     public function category()

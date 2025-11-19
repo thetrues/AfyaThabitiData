@@ -20,7 +20,7 @@ class DataController extends Controller
            $queryString =  str_replace("@param2", "'".$localSession['end_date']."'", $queryString);
          //  $queryString =  str_replace("@param3", $localSession['param3'], $queryString);
         }
-
+        
         return view('data.index', compact('localSession', 'query'));
     }
 
