@@ -61,21 +61,6 @@
         <!-- Start::header-content-right -->
         <ul class="header-content-right">
 
-            <!-- Start::header-element -->
-            <li class="header-element d-md-none d-block">
-              <form >
-               <!---startdate-->
-                <input type="date" name="startdate" id="startdate" class="form-control">
-                <input type="date" name="enddate" id="enddate" class="form-control">
-                <button type="submit" class="btn btn-primary">Filter</button>
-
-              </form>
-            </li>
-            <!-- End::header-element -->
-
-         
-
-
 
             <!-- Start::header-element -->
             <li class="header-element dropdown">
@@ -85,7 +70,7 @@
                     <div class="d-flex align-items-center">
                         <div class="me-xl-2 me-0 lh-1 d-flex align-items-center ">
                             <span class="avatar avatar-xs avatar-rounded bg-primary-transparent">
-                                <img src="assets/images/faces/5.jpg" alt="img">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 1) . substr(explode(' ', Auth::user()->name)[1] ?? Auth::user()->name, 0, 1)) }}
                             </span>
                         </div>
                         <div class="d-xl-block d-none lh-1">
@@ -99,7 +84,7 @@
                     <li class="border-bottom"><a class="dropdown-item d-flex flex-column" href="#"><span
                                 class="fs-12 text-muted">Wellcome!</span><span class="fs-14">{{ Auth::user()->name }}</span></a>
                     </li>
-                    <li><a class="dropdown-item d-flex align-items-center" href="profile.html"><i
+                    <li><a class="dropdown-item d-flex align-items-center" href="{{ route('profile.edit') }}"><i
                                 class="ti ti-user me-2 fs-18 text-primary"></i>Profile</a></li>
                     <li><a class="dropdown-item d-flex align-items-center" href="mail.html"><i
                                 class="ti ti-mail me-2 fs-18 text-primary"></i>Inbox</a></li>

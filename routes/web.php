@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DataController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\QueryController;
 use App\Http\Controllers\ProfileController;
 
@@ -38,6 +39,15 @@ Route::middleware('auth')->prefix('query')->group(function(){
 
 Route::middleware('auth')->prefix('data')->group(function(){
     Route::get('/{id}', [DataController::class, 'index'])->name('data.index');
+});
+
+Route::middleware('auth')->prefix('users')->group(function(){
+    Route::get('/', [UserController::class, 'listUsers'])->name('users.list');
+    Route::get('/create', [UserController::class, 'createUser'])->name('users.create');
+    Route::post('/store', [UserController::class, 'storeUser'])->name('users.store');
+    Route::get('/edit/{id}', [UserController::class, 'editUser'])->name('users.edit');
+    Route::put('/edit/{id}', [UserController::class, 'updateUser'])->name('users.update');
+    Route::delete('/delete/{id}', [UserController::class, 'deleteUser'])->name('users.delete');
 });
 
 

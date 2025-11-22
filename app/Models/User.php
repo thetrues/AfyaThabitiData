@@ -20,7 +20,25 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'email_verified_at',
         'password',
+        'profile_photo_path',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'two_factor_enabled',
+        'is_admin',
+        'is_active',
+        'is_verified',
+        'is_banned',
+        'is_suspended',
+        'is_deleted',
+        'is_online',
+        'last_login_ip',
+        'region',
+        'country',
+        'is_uploader',
+        'is_query_admin',
+        'remember_token'
     ];
 
     /**

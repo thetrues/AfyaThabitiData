@@ -9,8 +9,8 @@
                     <div class="card-body p-5">
                         <div class="mb-3 d-flex justify-content-center"> 
                             <a href="index.html"> 
-                                <img src="assets/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo"> 
-                                <img src="assets/images/brand-logos/desktop-dark.png" alt="logo" class="desktop-dark"> 
+                                <img src="{{ asset('logo.png') }}" alt="logo" class="desktop-logo"> 
+                                <img src="{{ asset('logo.png') }}" alt="logo" class="desktop-dark"> 
                             </a> 
                         </div>
                         <p class="h4 fw-semibold mb-2 text-center">Sign In</p>
@@ -18,7 +18,7 @@
                         <div class="row gy-3">
                             <div class="col-xl-12">
                                 <label for="email" :value="__('Email')"  class="form-label text-default" >Email</label>
-                                <input class="form-control" placeholder="user name"  type="email" name="email" :value="old('email')" required autofocus autocomplete="username">
+                                <input class="form-control" placeholder="email"  type="email" name="email" :value="old('email')" required autofocus autocomplete="username">
                             </div>
                             <div class="col-xl-12 mb-2">
                                 <label for="password" :value="__('Password')"  class="form-label text-default d-block">Password<a href="reset-password-basic.html" class="float-end  link-danger op-5 fw-medium fs-12">Forget password ?</a></label>
@@ -41,7 +41,7 @@
                             <button type="submit" class="btn btn-primary">Sign In</button>
                         </div>
                         <div class="text-center">
-                            <p class="text-muted mt-3 mb-0">Dont have an account? <a href="#" class="text-primary">Request One From Admin</a></p>
+                            <p class="text-muted mt-3 mb-0">Dont have an account? <a href="#" class="text-primary"> Request One From Admin</a></p>
                         </div>
                     </div>
                     </form>

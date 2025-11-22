@@ -14,6 +14,7 @@ class DataController extends Controller
         $queryId = $request->id;
         $query = Query::find($queryId);
         //replase params in query
+        if($queryId && $localSession &&  $localSession['start_date'] &&  $localSession['end_date'] ){
         if($query){
             $queryString = base64_decode($query->sql_statement);
            $queryString =  str_replace("@param1", "'".$localSession['start_date']."'", $queryString);
@@ -22,6 +23,9 @@ class DataController extends Controller
         }
         
         return view('data.index', compact('localSession', 'query'));
+      }else{
+        return redirect()->route('dashboard')->with('error', 'Please set filter parameters first');
+      }
     }
 
 
