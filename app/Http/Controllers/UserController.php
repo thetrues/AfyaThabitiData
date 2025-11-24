@@ -53,6 +53,8 @@ class UserController extends Controller
         $user->is_suspended = $request->is_suspended ?? false;
         $user->is_uploader = $request->is_uploader ?? false;
         $user->is_query_admin = $request->is_query_admin ?? false;
+        $user->is_deleted = false;
+        $user->is_online = false;
         $user->save();
 
         return redirect()->route('users.list')->with('success', 'User created successfully.');
