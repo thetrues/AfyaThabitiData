@@ -80,13 +80,27 @@
             <div class="container-fluid">
                 @php
                 $filterParameters = session('filter_parameters', []);
+                    use App\Models\Facility;
                 @endphp
                 @if(!empty($filterParameters))
-                <div class="alert alert-success d-flex align-items-center m-2" role="alert">
+                <div class="alert alert-info d-flex align-items-center m-2" role="alert">
                     <strong>Current Filters Applied:</strong>
-                    Facility: {{ $filterParameters['facility'] ?? 'N/A' }}
-                    Start Date: {{ $filterParameters['start_date'] ?? 'N/A' }}
-                    End Date: {{ $filterParameters['end_date'] ?? 'N/A' }}
+                        &nbsp; &nbsp;
+                        @if(isset($filterParameters['region']))
+                        <span class="text-dark">Region:</span> {{ $filterParameters['region'] ?? 'N/A' }}
+                        &nbsp; &nbsp;
+                        @endif
+                        @if(isset($filterParameters['council']))
+                        <span class="text-dark">Council:</span> {{ $filterParameters['council'] ?? 'N/A' }}
+                        &nbsp; &nbsp;
+                        @endif
+                    @if(isset($filterParameters['facility']))
+                    <span class="text-dark">Facility:</span> {{ Facility::getFacilityByHfrCode($filterParameters['facility'])->facility_name ?? 'N/A' }}
+                    &nbsp; &nbsp;
+                    @endif
+                    <span class="text-dark">Start Date:</span> {{ $filterParameters['start_date'] ?? 'N/A' }}
+                    &nbsp; &nbsp;
+                    <span class="text-dark">End Date:</span> {{ $filterParameters['end_date'] ?? 'N/A' }}
                 </div>
                 @endif
 
@@ -167,6 +181,63 @@
     </div>
 
 
+                <!-- Filter Modal -->
+                <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true" style="z-index:20050;">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="filterModalLabel">Filters</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="row g-2" id="filterForm">
+                                    <div class="col-md-4">
+                                        <label for="region" class="form-label visually-hidden">Region</label>
+                                        <select name="region" id="region" class="form-control" onchange="updateFacilities()">
+                                            <option value="all">All Regions</option>
+                                            @php $regions = App\Models\Facility::getRegions(); @endphp
+                                            @foreach($regions as $region)
+                                                <option value="{{ $region->snu_region }}">{{ $region->snu_region }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label for="council" class="form-label visually-hidden">Council</label>
+                                        <select name="council" id="council" class="form-control" onchange="updateFacilitiesByRegionAndCouncil()">
+                                            <option value="all">All Councils</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label for="facility" class="form-label visually-hidden">Facility</label>
+                                        <select name="facility" id="facility" class="form-control">
+                                            <option value="all">All Facilities</option>
+                                            @php $facilities = App\Models\Facility::all(); @endphp
+                                            @foreach($facilities as $facility)
+                                                <option value="{{ $facility->hfr_code }}">{{ $facility->facility_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="start_date" class="form-label visually-hidden">Start Date</label>
+                                        <input class="form-control" type="date" name="start_date" id="start_date" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="end_date" class="form-label visually-hidden">End Date</label>
+                                        <input class="form-control" type="date" name="end_date" id="end_date" required>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" onclick="submitFilter(); var m = bootstrap.Modal.getInstance(document.getElementById('filterModal')); m && m.hide();">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
     <!-- Scroll To Top -->
@@ -226,6 +297,8 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
+                        region: formData.get('region'),
+                        council: formData.get('council'),
                         facility: formData.get('facility'),
                         start_date: formData.get('start_date'),
                         end_date: formData.get('end_date')
@@ -242,6 +315,96 @@
                 });
         }
     </script>
+
+     <script>
+
+        //updateFacilities()
+        function updateFacilities() {
+             const region = document.getElementById('region').value;
+             const facilitySelect = document.getElementById('facility');
+             // Fetch facilities based on selected region
+             fetch('/api/facilities-by-region?region=' + encodeURIComponent(region), {
+                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
+             })
+             .then(res => res.ok ? res.json() : Promise.reject(res))
+             .then(data => {
+                 facilitySelect.innerHTML = '<option value="all">All Facilities</option>';
+                 (data || []).forEach(item => {
+                     const opt = document.createElement('option');
+                     opt.value = item.hfr_code;
+                     opt.textContent = item.facility_name;
+                     facilitySelect.appendChild(opt);
+                 });
+             })
+             .catch(err => {
+                 console.error('Failed to load facilities', err);
+             });
+
+             //fetch councils based on selected region
+             const councilSelect = document.getElementById('council');
+             //show loading indicator
+             councilSelect.innerHTML = '<option>Loading...</option>';
+             fetch('/api/councils-by-region?region=' + encodeURIComponent(region), {
+                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
+             })
+             .then(res => res.ok ? res.json() : Promise.reject(res))
+             .then(data => {
+                 councilSelect.innerHTML = '<option value="all">All Councils</option>';
+                 (data || []).forEach(item => {
+                     const val = item.psnu_council ?? item;
+                     const opt = document.createElement('option');
+                     opt.value = val;
+                     opt.textContent = val;
+                     councilSelect.appendChild(opt);
+                 });
+             })
+             .catch(err => {
+                 console.error('Failed to load councils', err);
+             });
+        }
+//updateFacilitiesByRegionAndCouncil
+        function updateFacilitiesByRegionAndCouncil() {
+             const region = document.getElementById('region').value;
+             const council = document.getElementById('council').value;
+             const facilitySelect = document.getElementById('facility');
+             //show loading indicator
+             facilitySelect.innerHTML = '<option>Loading...</option>';
+             // Fetch facilities based on selected region and council
+             fetch('/api/facilities-by-region-and-council?region=' + encodeURIComponent(region) + '&council=' + encodeURIComponent(council), {
+                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
+             })
+             .then(res => res.ok ? res.json() : Promise.reject(res))
+             .then(data => {
+                 facilitySelect.innerHTML = '<option value="all">All Facilities</option>';
+                 (data || []).forEach(item => {
+                     const opt = document.createElement('option');
+                     opt.value = item.hfr_code;
+                     opt.textContent = item.facility_name;
+                     facilitySelect.appendChild(opt);
+                 });
+             })
+             .catch(err => {
+                 console.error('Failed to load facilities', err);
+             });
+        }
+    </script>
+
+    
+                <script>
+                    // Ensure modal and backdrop sit above the sticky header if header has a high z-index
+                    (function(){
+                        var modal = document.getElementById('filterModal');
+                        if (!modal) return;
+                        modal.addEventListener('show.bs.modal', function () {
+                            // wait for backdrop to be inserted
+                            setTimeout(function(){
+                                var backdrop = document.querySelector('.modal-backdrop');
+                                if (backdrop) backdrop.style.zIndex = '20040';
+                                modal.style.zIndex = '20050';
+                            }, 0);
+                        });
+                    })();
+                </script>
 
 </body>
 

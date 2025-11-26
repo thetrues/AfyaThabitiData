@@ -9,3 +9,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('/data', [ApiController::class, 'getDataFromDW']);
+
+Route::get('/facilities-by-region', [ApiController::class, 'getFacilitiesByRegion']);
+Route::get('/councils-by-region', [ApiController::class, 'getCouncilsByRegion']);
+Route::get('/facilities-by-region-and-council', [ApiController::class, 'getFacilitiesByRegionAndCouncil']);
