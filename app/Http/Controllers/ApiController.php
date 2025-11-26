@@ -6,6 +6,7 @@ use App\Models\Query;
 use App\Models\LocalSession;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use App\Models\Facility;
 
 class ApiController extends Controller
 {
@@ -40,5 +41,45 @@ class ApiController extends Controller
 
         $data = json_decode($response, true);
         return response()->json(['data' => $data, 'dataType' => $query->graph_type ?? 'table']);
+    }
+
+    function getFacilitiesByRegion(Request $request){
+        $region = $request->input('region');
+        if($region && $region !== 'all'){
+            $facilities = Facility::where('snu_region', $region)->orderBy('facility_name')->get();
+        }else{
+            $facilities = Facility::orderBy('facility_name')->get();
+        }
+        return response()->json($facilities);
+    }
+
+    function getCouncilsByRegion(Request $request){
+        $region = $request->input('region');
+        if($region && $region !== 'all'){
+            $councils = Facility::getCouncils($region);
+        }else{
+            $councils = Facility::select('psnu_council')
+                ->distinct()
+                ->orderBy('psnu_council')
+                ->get();
+        }
+        return response()->json($councils);
+    }
+
+    function getFacilitiesByRegionAndCouncil(Request $request){
+        $region = $request->input('region');
+        $council = $request->input('council');
+        $query = Facility::query();
+
+        if($region && $region !== 'all'){
+            $query->where('snu_region', $region);
+        }
+
+        if($council && $council !== 'all'){
+            $query->where('psnu_council', $council);
+        }
+
+        $facilities = $query->orderBy('facility_name')->get();
+        return response()->json($facilities);
     }
 }

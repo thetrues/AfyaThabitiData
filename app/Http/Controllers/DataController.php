@@ -37,7 +37,7 @@ class DataController extends Controller
         //get session
         $localSession = new LocalSession();
         $data = $localSession->getFromSession();
-        
+
         return Response()->json(['status' => 'success', 'message' => 'Filter parameters saved to session', 'data' => $data]);
     }
 

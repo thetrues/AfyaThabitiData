@@ -31,23 +31,13 @@
             <div class="header-element header-search d-md-block d-none my-auto">
                 <!-- Start::header-link -->
                  <div class="col-md-12">
-                <form class="d-flex"  id="filterForm">
-                    <select name="facility" id="facility" class="form-control">
-                        <!--get facilities from db -->
-                        <option value="all">All Facilities</option>
-                        @php
-                        $facilities = App\Models\Facility::all();
-                        @endphp
-                        @foreach($facilities as $facility)
-                        <option value="{{ $facility->id }}">{{ $facility->facility_name }}</option>
-                        @endforeach
-                    </select>
-                    <input class="form-control me-2" type="date" name="start_date" id="start_date" placeholder="Start Date" aria-label="Search" required>
-                    <input class="form-control me-2" type="date" name="end_date" id="end_date" placeholder="End Date" aria-label="Search" required>
-                    <button class="btn btn-primary" type="button" onclick="submitFilter()">Filter</button> 
-                </form>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#filterModal">
+                        <i class="ti ti-filter me-1"></i> Filters
+                    </button>
+                </div>
 
-               
+
                  </div>
               
             
