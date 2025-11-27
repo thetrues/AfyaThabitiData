@@ -107,8 +107,9 @@
                 },
                 data: {
                     'id': '{{$query->id}}',
-                    //'start_date': ,
-                    //'end_date': 
+                    'start_date': "{{ $localSession['start_date'] }}",
+                    'end_date': "{{ $localSession['end_date'] }}",
+                    'hfrcode': "{{ $localSession['facility'] }}"
                 },
                 success: function(response) {
                     $('#loading-indicator').hide();

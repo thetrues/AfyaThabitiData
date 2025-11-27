@@ -16,8 +16,17 @@ class ApiController extends Controller
     }
 
     public function getDataFromDW(Request $request){
-       $startDate = '2025-10-01';
-         $endDate = '2025-10-02';
+       $startDate = $request->start_date;
+         $endDate = $request->end_date;
+         $hfrcode = 'all';
+         
+         if($request->has('start_date') && $request->has('end_date')){
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+         }
+         if($request->has('hfrcode')){
+            $hfrcode = $request->input('hfrcode');
+         }
         $queryId = $request->id;
         $query = Query::find($queryId);
         //replase params in query
@@ -25,6 +34,7 @@ class ApiController extends Controller
             $queryString = base64_decode($query->sql_statement);
            $queryString =  str_replace("@param1", "'".$startDate."'", $queryString);
            $queryString =  str_replace("@param2", "'".$endDate."'", $queryString);
+           $queryString =  str_replace("@hfrcode", "'".$hfrcode."'", $queryString);
         }
 
         //using curl to get data from data warehouse api http://qi-mis.org:8080/api/runquery/v2
