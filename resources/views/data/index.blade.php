@@ -130,36 +130,39 @@
                     const graph_type= '{{ $query->graph_type }}';
                     //const graph_type = @json($query->graph_type);
                     if (graph_type && graph_type.toLowerCase() === 'bar') {
-                        var categories = columns.map(col => col.title);
-                        // Extract values for the series key from categories
-                        var values = [];
-                        response.data.forEach(row => {
-                            console.log('row:', row);
-                            //convert row object to array of values
-                            var name = '';
-                            var val = 0;
-                            var rowValues = [];
-                            columns.forEach(col => {
-                                rowValues.push(row[col.data]);
-                                 name = col.title;
-                                 val = parseFloat(row[col.data]);
-                                 console.log(col);
-                                  values.push({
-                                name: name,
-                                data: [val]
-                            });
-                             }); 
-                           
-                            console.log('rowValues:', rowValues);
-                        });
-                       console.log('values:', values);  
+                         var categories = [];
+
+    if (columns.find(c => c.data === "Period")) {
+        categories = response.data.map(row => row.Period);
+    } else {
+        // If no Period → use Row numbers or single label
+        categories = response.data.length > 1 
+            ? response.data.map((r, i) => 'Row ' + (i + 1)) 
+            : ['Value'];
+    }
+
+    // 3. Build series (one series per column except Period)
+    var series = [];
+
+    columns.forEach(col => {
+        if (col.data === "Period") return;  // skip Period column
+
+        // Extract values for this column across all rows
+        var dataArray = response.data.map(row => Number(row[col.data]) || 0);
+
+        series.push({
+            name: col.title,
+            data: dataArray
+        });
+    });
+
                        
                         var options = {
                             chart: {
                                 type: 'bar',
                                 height: 350
                             },
-                            series:values,
+                            series:series,
                             xaxis: {
                                 categories: response.data.length !== 1 ? categories : ['{{ $query->name }}']
                             }

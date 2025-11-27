@@ -36,6 +36,7 @@ class ApiController extends Controller
            $queryString =  str_replace("@param2", "'".$endDate."'", $queryString);
            $queryString =  str_replace("@hfrcode", "'".$hfrcode."'", $queryString);
         }
+        
 
         //using curl to get data from data warehouse api http://qi-mis.org:8080/api/runquery/v2
         $api = "http://qi-mis.org:8080/api/runquery/v2";
@@ -47,10 +48,15 @@ class ApiController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
         $response = curl_exec($ch);
-        curl_close($ch);
-
+        // Avoid calling curl_close on CurlHandle objects (deprecated); only close if it's a resource
+        if (is_resource($ch)) {
+            curl_close($ch);
+        } else {
+            unset($ch);
+        }
+        
         $data = json_decode($response, true);
-        return response()->json(['data' => $data, 'dataType' => $query->graph_type ?? 'table']);
+        return response()->json(['data' => $data, 'dataType' => $query->graph_type ?? 'table', 'resposnse' => $response]);
     }
 
     function getFacilitiesByRegion(Request $request){
