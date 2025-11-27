@@ -42,6 +42,7 @@
                                     <th>Category</th>
                                     <th>Last Excution</th>
                                     <th>Excution Count</th>
+                                    <th>Query Type</th>
                                     <th>IsActive</th>
                                     <th>Actions</th>
                                 </tr>
@@ -55,6 +56,7 @@
                                     <td>{{ $query->category->name ?? 'N/A' }}</td>
                                     <td>{{ $query->last_execution ? $query->last_execution->format('Y-m-d H:i:s') : 'Never' }}</td>
                                     <td>{{ $query->execution_count }}</td>
+                                    <td>{{ $query->graph_type ?? 'N/A' }}</td>
                                     <td>
                                         @if($query->is_active)
                                         <span class="badge bg-success">Active</span>

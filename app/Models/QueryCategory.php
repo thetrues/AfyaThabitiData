@@ -15,6 +15,6 @@ class QueryCategory extends Model
 
     public function queries()
     {
-        return $this->hasMany(Query::class, 'query_category_id');
+        return $this->hasMany(Query::class, 'query_category_id')->whereNull('parent');
     }
 }

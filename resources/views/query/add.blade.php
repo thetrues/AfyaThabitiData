@@ -108,6 +108,24 @@
                             </select>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <label for="input-time" class="form-label">Data Type</label>
+                            <select name="graph_type" id="" class="form-control">
+                                <option value="table">Table</option>
+                                <option value="bar">Bar</option>
+                                <option value="line">Line</option>
+                                <option value="pie">Pie</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <label for="input-color" class="form-label">Parent Query (if any)</label>
+                            <select name="parent" id="" class="form-control select2">
+                                <option value="">-- Select Parent Query --</option>
+                                @foreach($queries as $query)
+                                <option value="{{ $query->id }}">{{ $query->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <label for="keyword" class="form-label">Keyword</label>
                             <input type="text" name="keyword" class="form-control" id="keyword">
                         </div>

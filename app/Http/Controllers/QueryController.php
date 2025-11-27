@@ -12,7 +12,8 @@ class QueryController extends Controller
 {
     public function addQuery(Request $request){
         $categories = QueryCategory::all();
-        return view('query.add', compact('categories'));
+        $queries = Query::whereNull('parent')->get();
+        return view('query.add', compact('categories', 'queries'));
     }
 
     public function storeQuery(Request $request){
@@ -23,7 +24,8 @@ class QueryController extends Controller
             'description' => 'nullable|string',
             'sql_statement' => 'required|string',
             'keyword' => 'nullable|string|max:100',
-            'query_category_id' => 'nullable|exists:query_categories,id'
+            'query_category_id' => 'nullable|exists:query_categories,id',
+            'parent' => 'nullable|exists:queries,id'
         ]);
 
         $sql = base64_encode($request->sql_statement);
@@ -42,6 +44,8 @@ class QueryController extends Controller
             'parameters_type3' => $request->parameter_3_type,
             'parameters4' => $request->parameter_4,
             'parameters_type4' => $request->parameter_4_type,
+            'graph_type' => $request->graph_type,
+            'parent' => $request->parent,
             'updated_by' => Auth::user()->id,
         ]);
 
@@ -51,7 +55,8 @@ class QueryController extends Controller
     public function editQuery(Request $request){
         $categories = QueryCategory::all();
         $query = Query::findOrFail($request->id);
-        return view('query.edit', compact('categories', 'query'));
+        $queries = Query::whereNull('parent')->get();
+        return view('query.edit', compact('categories', 'query', 'queries'));
     }
 
     public function updateQuery(Request $request){
@@ -60,7 +65,8 @@ class QueryController extends Controller
             'description' => 'nullable|string',
             'sql_statement' => 'required|string',
             'keyword' => 'nullable|string|max:100',
-            'query_category_id' => 'nullable|exists:query_categories,id'
+            'query_category_id' => 'nullable|exists:query_categories,id',
+            'parent' => 'nullable|exists:queries,id'
         ]);
 
         $query = Query::findOrFail($request->id);
@@ -80,6 +86,8 @@ class QueryController extends Controller
             'parameters_type3' => $request->parameter_3_type,
             'parameters4' => $request->parameter_4,
             'parameters_type4' => $request->parameter_4_type,
+            'parent' => $request->parent,
+            'graph_type' => $request->graph_type,
             'updated_by' => Auth::user()->id,
         ]);
 

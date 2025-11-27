@@ -18,6 +18,21 @@
         </div>
        
         <div class="d-flex gap-2">
+            @foreach($query->childQueries as $childQuery)
+            <a type="button" href="{{ route('data.index', ['id' => $childQuery->id]) }}" class="btn btn-secondary btn-wave waves-effect waves-light" target="_blank">
+                <i class="ri-database-2-line me-2"></i> {{ $childQuery->name }}
+            </a>
+            @endforeach
+            @if($query->parentQuery)
+            <a type="button" href="{{ route('data.index', ['id' => $query->parentQuery->id]) }}" class="btn btn-secondary btn-wave waves-effect waves-light" target="_blank">
+                <i class="ri-database-2-line me-2"></i> {{ $query->parentQuery->name }}
+            </a>
+            @endif
+            @if(auth()->user()->is_query_admin)
+            <a type="button" href="{{ route('query.edit', ['id' => $query->id]) }}" class="btn btn-primary btn-wave waves-effect waves-light">
+                <i class="ri-edit-2-line me-2"></i> Edit Query
+            </a>
+            @endif
         </div>
 
     </div>
@@ -72,12 +87,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+     <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
 
     <!-- Internal Datatables JS -->
-    <script src="../assets/js/datatables.js"></script>
+    <script src="{{ asset('assets/js/datatables.js') }}"></script>
 
     <!-- Custom JS -->
-    <script src="../assets/js/custom.js"></script>
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
 
     <script>
         $(document).ready(function() {
@@ -109,10 +125,49 @@
                         });
                     }
 
-                    console.log('Columns:', columns);
-
                     // Initialize DataTable with dynamic columns and data
-                    $('#dataDisplay').html('<table id="file-export" class="table table-bordered text-nowrap w-100"><thead><tr></tr></thead><tbody></tbody></table>');
+                    const graph_type= '{{ $query->graph_type }}';
+                    //const graph_type = @json($query->graph_type);
+                    if (graph_type && graph_type.toLowerCase() === 'bar') {
+                        var categories = columns.map(col => col.title);
+                        // Extract values for the series key from categories
+                        var values = [];
+                        response.data.forEach(row => {
+                            console.log('row:', row);
+                            //convert row object to array of values
+                            var name = '';
+                            var val = 0;
+                            var rowValues = [];
+                            columns.forEach(col => {
+                                rowValues.push(row[col.data]);
+                                 name = col.title;
+                                 val = parseFloat(row[col.data]);
+                                 console.log(col);
+                                  values.push({
+                                name: name,
+                                data: [val]
+                            });
+                             }); 
+                           
+                            console.log('rowValues:', rowValues);
+                        });
+                       console.log('values:', values);  
+                       
+                        var options = {
+                            chart: {
+                                type: 'bar',
+                                height: 350
+                            },
+                            series:values,
+                            xaxis: {
+                                categories: response.data.length !== 1 ? categories : ['{{ $query->name }}']
+                            }
+                        };
+
+                        var chart = new ApexCharts(document.querySelector("#dataDisplay"), options);
+                        chart.render();
+                    }else{
+                         $('#dataDisplay').html('<table id="file-export" class="table table-bordered text-nowrap w-100"><thead><tr></tr></thead><tbody></tbody></table>');
                     $('#file-export').DataTable({
                         data: response.data,
                         columns: columns,
@@ -123,6 +178,9 @@
                         responsive: true,
                         destroy: true
                     });
+                    }
+                   
+                   
                 },
                 error: function(error) {
                     console.error('Error fetching data:', error);

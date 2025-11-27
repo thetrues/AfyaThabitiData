@@ -12,7 +12,8 @@ class DataController extends Controller
         $localSession = new LocalSession();
         $localSession = $localSession->getFromSession();
         $queryId = $request->id;
-        $query = Query::find($queryId);
+        $query = Query::with(['parentQuery', 'childQueries', 'category'])->find($queryId);
+        
         //replase params in query
         if($queryId && $localSession &&  $localSession['start_date'] &&  $localSession['end_date'] ){
         if($query){

@@ -28,10 +28,21 @@ class Query extends Model
         'execution_count',
         'has_external_query_dependences',
         'graph_type',
+        'parent',
     ];
 
     public function category()
     {
         return $this->belongsTo(QueryCategory::class, 'query_category_id');
+    }
+
+    public function parentQuery()
+    {
+        return $this->belongsTo(Query::class, 'parent');
+    }
+
+    public function childQueries()
+    {
+        return $this->hasMany(Query::class, 'parent');
     }
 }

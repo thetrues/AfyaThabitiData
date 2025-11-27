@@ -107,6 +107,24 @@
                                 <option value="yes" {{ $query->has_dependencies == 'yes' ? 'selected' : '' }}>Yes</option>
                             </select>
                         </div>
+                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <label for="input-time" class="form-label">Data Type</label>
+                            <select name="graph_type" id="" class="form-control">
+                                <option value="table" {{ $query->graph_type == 'table' ? 'selected' : '' }}>Table</option>
+                                <option value="bar" {{ $query->graph_type == 'bar' ? 'selected' : '' }}>Bar</option>
+                                <option value="line" {{ $query->graph_type == 'line' ? 'selected' : '' }}>Line</option>
+                                <option value="pie" {{ $query->graph_type == 'pie' ? 'selected' : '' }}>Pie</option>
+                            </select>
+                        </div>
+                          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <label for="input-color" class="form-label">Parent Query (if any)</label>
+                            <select name="parent" id="" class="form-control select2">
+                                <option value="">-- Select Parent Query --</option>
+                                @foreach($queries as $parentQuery)
+                                <option value="{{ $parentQuery->id }}" {{ $query->parent == $parentQuery->id ? 'selected' : '' }}>{{ $parentQuery->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                             <label for="keyword" class="form-label">Keyword</label>
                             <input type="text" name="keyword" class="form-control" id="keyword" value="{{ $query->keyword }}">
