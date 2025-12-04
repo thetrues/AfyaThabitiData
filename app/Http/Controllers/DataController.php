@@ -13,6 +13,8 @@ class DataController extends Controller
         $localSession = $localSession->getFromSession();
         $queryId = $request->id;
         $query = Query::with(['parentQuery', 'childQueries', 'category'])->find($queryId);
+        $childQueries = Query::where('parent', $queryId)->get();
+       
         
         //replase params in query
         if($queryId && $localSession &&  $localSession['start_date'] &&  $localSession['end_date'] ){
@@ -23,7 +25,7 @@ class DataController extends Controller
          //  $queryString =  str_replace("@param3", $localSession['param3'], $queryString);
         }
         
-        return view('data.index', compact('localSession', 'query'));
+        return view('data.index', compact('localSession', 'query', 'childQueries'));
       }else{
         return redirect()->route('dashboard')->with('error', 'Please set filter parameters first');
       }

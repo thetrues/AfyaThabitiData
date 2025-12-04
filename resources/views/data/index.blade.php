@@ -18,7 +18,7 @@
         </div>
        
         <div class="d-flex gap-2">
-            @foreach($query->childQueries as $childQuery)
+            @foreach($childQueries as $childQuery)
             <a type="button" href="{{ route('data.index', ['id' => $childQuery->id]) }}" class="btn btn-secondary btn-wave waves-effect waves-light" target="_blank">
                 <i class="ri-database-2-line me-2"></i> {{ $childQuery->name }}
             </a>
@@ -53,7 +53,7 @@
                         </div>
                         <p class="mt-2 text-muted">Loading data...</p>
                     </div>
-                    <div id="dataDisplay"></div>
+                    <div id="dataDisplay" class="table-responsive" style="overflow-x:auto;"></div>
                 </div>
             </div>
 
@@ -171,7 +171,7 @@
                         var chart = new ApexCharts(document.querySelector("#dataDisplay"), options);
                         chart.render();
                     }else{
-                         $('#dataDisplay').html('<table id="file-export" class="table table-bordered text-nowrap w-100"><thead><tr></tr></thead><tbody></tbody></table>');
+                         $('#dataDisplay').html('<table id="file-export" class="table table-bordered text-nowrap "><thead><tr></tr></thead><tbody></tbody></table>');
                     $('#file-export').DataTable({
                         data: response.data,
                         columns: columns,
@@ -179,7 +179,8 @@
                         buttons: [
                             'copy', 'csv', 'excel', 'pdf', 'print'
                         ],
-                        responsive: true,
+                        responsive: false,
+                         pageLength: 25,
                         destroy: true
                     });
                     }
