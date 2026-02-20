@@ -13,3 +13,6 @@ Route::post('/data', [ApiController::class, 'getDataFromDW']);
 Route::get('/facilities-by-region', [ApiController::class, 'getFacilitiesByRegion']);
 Route::get('/councils-by-region', [ApiController::class, 'getCouncilsByRegion']);
 Route::get('/facilities-by-region-and-council', [ApiController::class, 'getFacilitiesByRegionAndCouncil']);
+
+Route::post('/import-org', [ApiController::class, 'importOrg']);
+Route::get('/org-data', [ApiController::class, 'getOrgData']);

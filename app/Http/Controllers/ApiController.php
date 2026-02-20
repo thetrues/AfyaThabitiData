@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Query;
+use App\Models\Facility;
 use App\Models\LocalSession;
+use App\Models\Query;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use App\Models\Facility;
+use Illuminate\Support\Facades\DB;
 
 class ApiController extends Controller
 {
@@ -97,5 +98,29 @@ class ApiController extends Controller
 
         $facilities = $query->orderBy('facility_name')->get();
         return response()->json($facilities);
+    }
+
+    function importOrg(Request $request){
+
+         $orgs = $request->input('organisationUnits');
+          foreach($orgs as $org){
+               $orgData = [
+               // 'id' => $org['id'],
+                'name' => $org['name'],
+                'data' => json_encode($org)
+               ];
+               DB::table('orgs2_new')->insert($orgData);
+          }
+          return response()->json(['message' => 'Organizations imported successfully']);
+    }
+
+    function getOrgData(Request $request){
+        $orgs = DB::table('orgs2_new')->get();
+        $data = [];
+        foreach($orgs as $org){
+            $org->data = json_decode($org->data);
+                array_push($data, $org->data);
+        }
+        return response()->json($data);
     }
 }
